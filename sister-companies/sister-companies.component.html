@@ -1,0 +1,102 @@
+<vex-page-layout>
+
+  <vex-page-layout-header class="pb-16 flex flex-col items-start justify-center">
+    <div class="w-full flex flex-col sm:flex-row justify-between px-gutter">
+      <div>
+        <h1 class="title mt-0 mb-1">Empresas</h1>
+        <vex-breadcrumbs
+          [crumbs]="[{ title: 'Panel de control', routerSegment: ['/control-panel'] }, { title: 'Finanzas', routerSegment: ['/control-panel/finance'] }, { title: 'Empresas', routerSegment: [] }]"></vex-breadcrumbs>
+      </div>
+    </div>
+  </vex-page-layout-header>
+
+  <vex-page-layout-content class="-mt-6 px-gutter">
+    <div class="card overflow-auto -mt-16">
+      <!-- Title Bar -->
+      <div class="bg-app-bar px-6 h-16 border-b sticky left-0 flex items-center">
+        <!-- Title -->
+        <h2 class="title my-0 ltr:pr-4 rtl:pl-4 ltr:mr-4 rtl:ml-4 ltr:border-r rtl:border-l hidden sm:block flex-none">
+          Empresas
+        </h2>
+         <span class="flex-1"></span>
+
+        <!-- Archived filter -->
+        <button type="button" mat-icon-button   matTooltip="Empresas archivadas" class="flex-none ml-4">
+          <mat-icon svgIcon="fa-solid:archive"></mat-icon>
+        </button>
+
+        <!-- Open create dialog button -->
+        <button type="button" mat-mini-fab color="primary" (click)="openSisterCompanyCreationAndUpadateDialogComponent(null)" matTooltip="Agregar nueva empresa" class="ml-4 flex-none">
+          <mat-icon svgIcon="mat:add"></mat-icon>
+        </button>
+      </div>
+
+      <!-- Table -->
+      <table mat-table @stagger [dataSource]="sistermCompanyDataSource" matSort  class="w-full">
+
+        <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+
+          <!-- Text Columns -->
+          <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] || '-' }}</td>
+          </ng-container>
+
+          <!-- Icon Columns -->
+          <ng-container *ngIf="column.type === 'icon'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses">
+              <mat-icon matPrefix [svgIcon]="row[column.property]" color="primary"></mat-icon>
+            </td>
+
+          </ng-container>
+
+        </ng-container>
+
+        <!-- Action Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ACCIONES</th>
+          <td mat-cell *matCellDef="let row">
+            <div class="flex">
+
+              <ng-container *ngIf="!row.isArchived; else archivedAccountTemplate">
+                <!-- Update account action -->
+                <a mat-icon-button (click)="$event.stopPropagation();opencreateAndUpdateSisterCompany(row)" matTooltip="Editar cuenta"
+                  class="w-8 h-8 leading-none flex justify-center items-center hover:bg-hover bg-orange-light text-orange">
+                  <mat-icon svgIcon="mat:edit"></mat-icon>
+                </a>
+
+                <!-- Archive account action -->
+                <button type="button" mat-icon-button (click)="toggleArchivedFilter()" matTooltip="Productos archivados" [ngClass]="{'bg-black text-white': archivedFilter$ | async }" class="flex-none ml-4">
+                  <mat-icon svgIcon="fa-solid:archive"></mat-icon>
+                </button>
+                
+              </ng-container>
+              <ng-template #archivedAccountTemplate>
+                <!-- Unarchive account action -->
+                <a mat-icon-button  matTooltip="Desarchivar cuenta"
+                  class="w-8 h-8 leading-none flex justify-center items-center hover:bg-hover bg-orange-light text-orange">
+                  <mat-icon svgIcon="mat:unarchive"></mat-icon>
+                </a>
+              </ng-template>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
+        <!-- (click)="openCreateAndUpdateAccountDialog(row)" cursor-pointer -->
+        <tr mat-row *matRowDef="let row; columns: visibleColumns;" @fadeInRight class="hover:bg-hover trans-ease-out"></tr>
+      </table>
+
+      <!-- Pagination -->
+
+      <div *ngIf="sistermCompanyDataSource.filteredData.length === 0" @scaleFadeIn class="flex flex-col justify-center items-center w-full">
+        <img class="m-6 h-64" src="/assets/img/illustrations/data_center.svg">
+        <h2 class="headline m-0 mb-6 text-center">Recuperando registros.</h2>
+    </div>
+    </div>
+  </vex-page-layout-content>
+</vex-page-layout>

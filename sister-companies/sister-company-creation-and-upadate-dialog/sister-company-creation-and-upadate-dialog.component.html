@@ -1,0 +1,28 @@
+<form [formGroup]="SisterCompanyDataForm" (ngSubmit)="saveData()">
+  <div mat-dialog-title class="flex flex-row gap-2 justify-between items-center">
+    <h4 class="headline m-0 flex-auto">
+      Configuración de la empresa
+    </h4>
+    <button type="button" mat-icon-button mat-dialog-close class="text-secondary">
+      <mat-icon svgIcon="mat:close"></mat-icon>
+    </button>
+  </div>
+
+  <mat-divider class="-mx-6 text-border"></mat-divider>
+
+  <mat-dialog-content class="pt-3 flex flex-col" @stagger>
+
+    <!-- Form Field -->
+    <mat-form-field class="flex-auto" @fadeInRight>
+      <mat-label>Nombre de la empresa</mat-label>
+      <textarea matInput formControlName="name"
+      name="name" required minlength="3" cdkFocusInitial rows="3"></textarea>
+      <mat-error *ngIf="SisterCompanyDataForm.get('name').invalid">Es requerido el nombre de la empresa, de al menos 3 letras</mat-error>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button type="button" mat-raised-button  mat-dialog-close tabindex="-1">CANCELAR</button>
+    <button type="submit" mat-raised-button  color="primary" [disabled]="SisterCompanyDataForm.invalid" class="uppercase">Guardar datos</button>
+  </mat-dialog-actions>
+</form>

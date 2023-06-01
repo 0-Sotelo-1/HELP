@@ -1,0 +1,28 @@
+<div mat-dialog-title class="flex items-center">
+  <h4 class="headline m-0 flex-auto">
+    Confirmación de {{ mode === 'archiving' ? 'archivación' : 'desarchivación' }}
+  </h4>
+  <button type="button" mat-icon-button mat-dialog-close class="text-secondary">
+    <mat-icon svgIcon="mat:close"></mat-icon>
+  </button>
+</div>
+
+<mat-divider class="-mx-6 text-border"></mat-divider>
+
+<mat-dialog-content class="flex flex-col">
+  <div class="p-4 text-center trans-ease-out relative">
+    <div class="h-20 w-20 rounded-full flex items-center justify-center mx-auto" ngClass="{{ mode === 'archiving' ? 'bg-deep-orange-light text-deep-orange' : 'bg-orange-light text-orange' }}">
+      <mat-icon svgIcon="mat:warning" class="icon-6xl"></mat-icon>
+    </div>
+    <div>
+      <p class="m-0 mt-3 body-1">
+        ¿Desea {{ mode === 'archiving' ? 'archivar' : 'desarchivar' }} el producto <b ngClass="{{ mode === 'archiving' ? 'text-deep-orange' : 'text-orange' }}"> {{ sistercompany.name }} </b>?
+      </p>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button type="button" mat-button mat-dialog-close class="uppercase" tabindex="-1">Cancelar</button>
+  <button type="button" mat-button (click)="archiveSisterCompany()" class="uppercase" ngClass="{{ mode === 'archiving' ? 'text-deep-orange' : 'text-orange' }}">{{ mode === 'archiving' ? 'Archivar' : 'Desarchivar' }}</button>
+</mat-dialog-actions>
